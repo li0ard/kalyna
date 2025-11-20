@@ -1,5 +1,5 @@
-import { IS, IT, KUPYNA_T, S } from "./const";
-import { bytesToUint64s, swap_block, uint64sToBytes } from "./utils";
+import { IS, IT, KUPYNA_T, S } from "./const.js";
+import { bytesToUint64s, swap_block, uint64sToBytes } from "./utils.js";
 
 /** Kalyna abstract class */
 export abstract class KalynaBase {

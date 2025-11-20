@@ -1,5 +1,5 @@
-import { concatBytes, xor } from "@li0ard/gost3413/dist/utils";
-import type { KalynaBase } from "../core";
+import { concatBytes, xor } from "@li0ard/gost3413/dist/utils.js";
+import type { KalynaBase } from "../core.js";
 
 const incrementCounterAt = (ctr: Uint8Array, pos: number) => {
     let j = pos;
@@ -16,7 +16,7 @@ export const ctr = (cipherClass: KalynaBase, data: Uint8Array, iv: Uint8Array): 
     if (iv.length !== cipherClass.blockSize) throw new Error("Invalid IV size");
 
     const keystreamBlocks: Uint8Array[] = [];
-    let ctr = cipherClass.encrypt(iv);
+    const ctr = cipherClass.encrypt(iv);
     for (let i = 0; i < Math.ceil(data.length / cipherClass.blockSize); i++) {
         incrementCounterAt(ctr, 0);
         keystreamBlocks.push(cipherClass.encrypt(ctr));

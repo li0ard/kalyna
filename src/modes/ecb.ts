@@ -1,5 +1,5 @@
 import { ecb_encrypt, ecb_decrypt } from "@li0ard/gost3413";
-import type { KalynaBase } from "../core";
+import type { KalynaBase } from "../core.js";
 
 /**
  * Encrypts data using Electronic Codebook (ECB) mode
@@ -7,8 +7,7 @@ import type { KalynaBase } from "../core";
  * @param data Data to be encrypted
  */
 export const encryptECB = (cipherClass: KalynaBase, data: Uint8Array): Uint8Array => {
-    const encrypter = (buf: Uint8Array) => (cipherClass.encrypt(buf));
-    return ecb_encrypt(encrypter, cipherClass.blockSize, data);
+    return ecb_encrypt(cipherClass.encrypt.bind(cipherClass), cipherClass.blockSize, data);
 }
 
 /**
@@ -17,6 +16,5 @@ export const encryptECB = (cipherClass: KalynaBase, data: Uint8Array): Uint8Arra
  * @param data Data to be encrypted
  */
 export const decryptECB = (cipherClass: KalynaBase, data: Uint8Array): Uint8Array => {
-    const decrypter = (buf: Uint8Array) => (cipherClass.decrypt(buf));
-    return ecb_decrypt(decrypter, cipherClass.blockSize, data);
+    return ecb_decrypt(cipherClass.decrypt.bind(cipherClass), cipherClass.blockSize, data);
 }

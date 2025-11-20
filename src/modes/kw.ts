@@ -1,5 +1,5 @@
-import type { KalynaBase } from "../core";
-import { pad, unpad } from "../padding";
+import type { KalynaBase } from "../core.js";
+import { pad, unpad } from "../padding.js";
 
 /**
  * Wrap key
@@ -10,22 +10,21 @@ export const wrapKey = (cipherClass: KalynaBase, data: Uint8Array): Uint8Array =
     const blockSize = cipherClass.blockSize;
     const block_size_kw_byte = blockSize >> 1;
     let plain_data_size_byte = data.length;
-
     const cipher_data = new Uint8Array(plain_data_size_byte + (blockSize << 2));
     cipher_data.set(data, 0);
 
     let i = 0;
     if (plain_data_size_byte % blockSize !== 0) {
         let bitLength = plain_data_size_byte << 3;
-        
+
         while (bitLength > 0) {
             cipher_data[plain_data_size_byte + i] = bitLength & 0xFF;
             i++;
             bitLength >>>= 8;
         }
-        
+
         plain_data_size_byte += block_size_kw_byte;
-        
+
         const paddedData = pad(cipher_data.subarray(0, plain_data_size_byte), blockSize);
         cipher_data.set(paddedData, 0);
         plain_data_size_byte = paddedData.length;
@@ -34,12 +33,12 @@ export const wrapKey = (cipherClass: KalynaBase, data: Uint8Array): Uint8Array =
     const r = Math.floor(plain_data_size_byte / blockSize);
     const n = 2 * (r + 1);
     const v = (n - 1) * 6;
-    
+
     plain_data_size_byte += blockSize;
 
     const b_el_count = (n - 1) * block_size_kw_byte;
     const b_last_el = (n - 2) * block_size_kw_byte;
-    
+
     const b = new Uint8Array(n * block_size_kw_byte);
     const shift = new Uint8Array(n * block_size_kw_byte);
     const B = new Uint8Array(block_size_kw_byte);

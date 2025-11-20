@@ -1,7 +1,7 @@
-import { concatBytes, xor } from "@li0ard/gost3413/dist/utils";
-import type { KalynaBase } from "../core";
-import { ctr } from "../index";
-import { equalBytes, gf2mMul } from "../utils";
+import { concatBytes, xor } from "@li0ard/gost3413/dist/utils.js";
+import type { KalynaBase } from "../core.js";
+import { ctr } from "../index.js";
+import { equalBytes, gf2mMul, numberToBytesLE } from "../utils.js";
 
 /**
  * Compute GMAC
@@ -13,7 +13,7 @@ import { equalBytes, gf2mMul } from "../utils";
 export const gmac = (cipherClass: KalynaBase, authData: Uint8Array, cipherData: Uint8Array = new Uint8Array(), q: number = 16): Uint8Array => {
     const blockSize = cipherClass.blockSize;
     const H = cipherClass.encrypt(new Uint8Array(blockSize));
-    
+
     let B: Uint8Array = new Uint8Array(blockSize);
     let i = 0;
     while (i < authData.length) {
@@ -41,24 +41,7 @@ export const gmac = (cipherClass: KalynaBase, authData: Uint8Array, cipherData: 
         i += blockSize;
     }
 
-    const lambda_o = new Uint8Array(blockSize / 2);
-    const lambda_c = new Uint8Array(blockSize / 2);
-    let temp = authData.length * 8;
-    for (let i = 0; i < (blockSize / 2); i++) {
-        lambda_o[i] = temp & 0xFF;
-        temp >>>= 8;
-        if (temp === 0) break;
-    }
-
-    if(cipherData.length != 0) {
-        let temp = cipherData.length * 8;
-        for (let i = 0; i < (blockSize / 2); i++) {
-            lambda_c[i] = temp & 0xFF;
-            temp >>>= 8;
-            if (temp === 0) break;
-        }
-    }
-    B = xor(B, concatBytes(lambda_o, lambda_c));
+    B = xor(B, concatBytes(numberToBytesLE(authData.length * 8, blockSize / 2), numberToBytesLE(cipherData.length * 8, blockSize / 2)));
     // B = gf2mMul(blockSize, B, H);
 
     return cipherClass.encrypt(B).slice(0, q);

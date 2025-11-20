@@ -1,7 +1,7 @@
-import { concatBytes } from "@li0ard/gost3413/dist/utils";
-import { ctr } from "../";
-import type { KalynaBase } from "../core";
-import { equalBytes } from "../utils";
+import { concatBytes } from "@li0ard/gost3413/dist/utils.js";
+import { ctr } from "../index.js";
+import type { KalynaBase } from "../core.js";
+import { equalBytes } from "../utils.js";
 
 const ccm_mac = (cipherClass: KalynaBase, iv: Uint8Array, authData: Uint8Array, plainData: Uint8Array, q: number = 16, Nb: number = 4): Uint8Array => {
     const blockSize = cipherClass.blockSize;

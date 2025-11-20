@@ -1,7 +1,7 @@
-import { bytesToHex, hexToNumber, numberToBytesBE } from "@li0ard/gost3413/dist/utils";
+import { bytesToHex, hexToNumber, numberToBytesBE } from "@li0ard/gost3413/dist/utils.js";
 
 export const bytesToNumberLE = (bytes: Uint8Array): bigint => hexToNumber(bytesToHex(bytes.slice().reverse()));
-export const numberToBytesLE = (n: bigint, len: number): Uint8Array => numberToBytesBE(n, len).reverse();
+export const numberToBytesLE = (n: number | bigint, len: number): Uint8Array => numberToBytesBE(n, len).reverse();
 
 export const bytesToUint64s = (b: Uint8Array): BigUint64Array => {
     const size = Math.floor(b.length / 8);

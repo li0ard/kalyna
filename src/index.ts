@@ -1,4 +1,4 @@
-import { KalynaBase } from "./core";
+import { KalynaBase } from "./core.js";
 
 /** Kalyna 128 bit version */
 export class Kalyna128 extends KalynaBase {
@@ -23,14 +23,14 @@ export class Kalyna512 extends KalynaBase {
     constructor(key: Uint8Array) { super(key, 8); }
 }
 
-export * from "./padding";
-export * from "./modes/ecb";
-export * from "./modes/cbc";
-export * from "./modes/ofb";
-export * from "./modes/ctr";
-export * from "./modes/mac";
-export * from "./modes/cfb";
-export * from "./modes/ccm";
-export * from "./modes/gcm";
-export * from "./modes/kw";
-export * from "./modes/xts";
+export * from "./padding.js";
+export * from "./modes/ecb.js";
+export * from "./modes/cbc.js";
+export * from "./modes/ofb.js";
+export * from "./modes/ctr.js";
+export * from "./modes/mac.js";
+export * from "./modes/cfb.js";
+export * from "./modes/ccm.js";
+export * from "./modes/gcm.js";
+export * from "./modes/kw.js";
+export * from "./modes/xts.js";

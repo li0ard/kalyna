@@ -1,5 +1,5 @@
 import { cbc_encrypt, cbc_decrypt } from "@li0ard/gost3413";
-import type { KalynaBase } from "../core";
+import type { KalynaBase } from "../core.js";
 
 /**
  * Encrypts data using Cipher Block Chaining (CBC) mode
@@ -8,8 +8,7 @@ import type { KalynaBase } from "../core";
  * @param iv Initialization vector
  */
 export const encryptCBC = (cipherClass: KalynaBase, data: Uint8Array, iv: Uint8Array): Uint8Array => {
-    const encrypter = (buf: Uint8Array) => (cipherClass.encrypt(buf));
-    return cbc_encrypt(encrypter, cipherClass.blockSize, data, iv);
+    return cbc_encrypt(cipherClass.encrypt.bind(cipherClass), cipherClass.blockSize, data, iv);
 }
 
 /**
@@ -19,6 +18,5 @@ export const encryptCBC = (cipherClass: KalynaBase, data: Uint8Array, iv: Uint8A
  * @param iv Initialization vector
  */
 export const decryptCBC = (cipherClass: KalynaBase, data: Uint8Array, iv: Uint8Array): Uint8Array => {
-    const decrypter = (buf: Uint8Array) => (cipherClass.decrypt(buf));
-    return cbc_decrypt(decrypter, cipherClass.blockSize, data, iv);
+    return cbc_decrypt(cipherClass.decrypt.bind(cipherClass), cipherClass.blockSize, data, iv);
 }

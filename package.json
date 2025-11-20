@@ -1,6 +1,6 @@
 {
   "name": "@li0ard/kalyna",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
@@ -27,7 +27,7 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "@li0ard/gost3413": "^0.1.6"
+    "@li0ard/gost3413": "^0.1.7"
   },
   "files": ["dist"],
   "publishConfig": {

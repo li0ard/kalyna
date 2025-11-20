@@ -5,7 +5,6 @@ export const pad = (data: Uint8Array, blockSize: number): Uint8Array => {
 
     const padLength = blockSize - remainder;
     const padded = new Uint8Array(data.length + padLength);
-
     padded.set(data);
     padded[data.length] = 0x80;
 

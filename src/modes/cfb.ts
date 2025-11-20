@@ -1,4 +1,4 @@
-import type { KalynaBase } from "../core";
+import type { KalynaBase } from "../core.js";
 
 /**
  * Encrypts data using Cipher Feedback (CFB) mode
@@ -15,10 +15,8 @@ export const encryptCFB = (cipherClass: KalynaBase, data: Uint8Array, iv: Uint8A
     let gamma = cipherClass.encrypt(iv);
     const feed = new Uint8Array(iv);
     let offset = 0;
-    
     const result = new Uint8Array(data.length);
     let dataOff = 0;
-
 
     while (offset > 0 && dataOff < data.length) {
         result[dataOff] = data[dataOff] ^ gamma[offset];
@@ -29,7 +27,7 @@ export const encryptCFB = (cipherClass: KalynaBase, data: Uint8Array, iv: Uint8A
             offset = blockSize - q;
         }
     }
-    
+
     while (dataOff + q <= data.length) {
         for (let i = 0; i < q; i++) result[dataOff + i] = data[dataOff + i] ^ gamma[blockSize - q + i];
         feed.set(gamma.slice(0, blockSize - q));
@@ -38,12 +36,12 @@ export const encryptCFB = (cipherClass: KalynaBase, data: Uint8Array, iv: Uint8A
         gamma = cipherClass.encrypt(feed);
         dataOff += q;
     }
-    
+
     while (dataOff < data.length) {
         result[dataOff] = data[dataOff] ^ gamma[blockSize - (data.length - dataOff)];
         dataOff++;
     }
-    
+
     return result;
 }
 
@@ -62,10 +60,9 @@ export const decryptCFB = (cipherClass: KalynaBase, data: Uint8Array, iv: Uint8A
     let gamma = cipherClass.encrypt(iv);
     const feed = new Uint8Array(iv);
     let offset = 0;
-    
     const result = new Uint8Array(data.length);
     let dataOff = 0;
-    
+
     while (offset > 0 && dataOff < data.length) {
         result[dataOff] = data[dataOff] ^ gamma[offset];
         feed[offset++] = data[dataOff++];
@@ -75,7 +72,7 @@ export const decryptCFB = (cipherClass: KalynaBase, data: Uint8Array, iv: Uint8A
             offset = blockSize - q;
         }
     }
-    
+
     while (dataOff + q <= data.length) {
         for (let i = 0; i < q; i++) result[dataOff + i] = data[dataOff + i] ^ gamma[blockSize - q + i];
         feed.set(gamma.slice(0, blockSize - q));
@@ -84,11 +81,11 @@ export const decryptCFB = (cipherClass: KalynaBase, data: Uint8Array, iv: Uint8A
         gamma = cipherClass.encrypt(feed);
         dataOff += q;
     }
-    
+
     while (dataOff < data.length) {
         result[dataOff] = data[dataOff] ^ gamma[blockSize - (data.length - dataOff)];
         dataOff++;
     }
-    
+
     return result;
 }
