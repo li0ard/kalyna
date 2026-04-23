@@ -23,6 +23,7 @@ describe("GCM", () => {
 
         expect(encryptGCM(a, pt, iv, ad, 32)).toStrictEqual(ct);
         expect(decryptGCM(a, ct, iv, ad, 32)).toStrictEqual(pt);
+        // @ts-ignore
         expect(encryptGCM(a, pt, iv, ad)).toStrictEqual(ct.subarray(0, 80));
         expect(decryptGCM(a, ct.subarray(0, 80), iv, ad)).toStrictEqual(pt);
     })
@@ -75,6 +76,7 @@ describe("GMAC", () => {
         let pt = hexToBytes("404142434445464748494A4B4C4D4E4F505152535455565758595A5B5C5D5E5F");
         let ct = hexToBytes("FF48B56F2C26CC484B8F5952D7B3E1FE69577701C50BE96517B33921E44634CD");
 
+        // @ts-ignore
         expect(gmac(a, pt)).toStrictEqual(ct.subarray(0, 16));
         expect(gmac(a, pt, new Uint8Array(), 32)).toStrictEqual(ct);
     })
