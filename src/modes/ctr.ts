@@ -1,7 +1,7 @@
-import { concatBytes, xor } from "@li0ard/gost3413/dist/utils.js";
+import { concatBytes, xor, type TArg, type TRet } from "@li0ard/gost3413/dist/utils.js";
 import type { KalynaBase } from "../core.js";
 
-const incrementCounterAt = (ctr: Uint8Array, pos: number) => {
+const incrementCounterAt = (ctr: TArg<Uint8Array>, pos: number) => {
     let j = pos;
     while (j < ctr.length) if (++ctr[j++] != 0) break;
 }
@@ -12,7 +12,7 @@ const incrementCounterAt = (ctr: Uint8Array, pos: number) => {
  * @param data Data to be encrypted/decrypted
  * @param iv Initialization vector
  */
-export const ctr = (cipherClass: KalynaBase, data: Uint8Array, iv: Uint8Array): Uint8Array => {
+export const ctr = (cipherClass: KalynaBase, data: TArg<Uint8Array>, iv: TArg<Uint8Array>): TRet<Uint8Array> => {
     if (iv.length !== cipherClass.blockSize) throw new Error("Invalid IV size");
 
     const keystreamBlocks: Uint8Array[] = [];

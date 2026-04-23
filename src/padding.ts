@@ -1,7 +1,9 @@
+import type { TArg, TRet } from "@li0ard/gost3413";
+
 /** Pad data */
-export const pad = (data: Uint8Array, blockSize: number): Uint8Array => {
+export const pad = (data: TArg<Uint8Array>, blockSize: number): TRet<Uint8Array> => {
     const remainder = data.length % blockSize;
-    if (remainder === 0) return data;
+    if (remainder === 0) return data as TRet<Uint8Array>;
 
     const padLength = blockSize - remainder;
     const padded = new Uint8Array(data.length + padLength);
@@ -12,7 +14,7 @@ export const pad = (data: Uint8Array, blockSize: number): Uint8Array => {
 }
 
 /** Unpad data */
-export const unpad = (paddedData: Uint8Array, blockSize: number): Uint8Array => {
+export const unpad = (paddedData: TArg<Uint8Array>, blockSize: number): TRet<Uint8Array> => {
     if (paddedData.length % blockSize !== 0) throw new Error("Padded data length must be multiple of block size");
 
     let i = paddedData.length - 1;

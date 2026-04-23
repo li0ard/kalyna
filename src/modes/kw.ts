@@ -1,3 +1,4 @@
+import type { TArg, TRet } from "@li0ard/gost3413";
 import type { KalynaBase } from "../core.js";
 import { pad, unpad } from "../padding.js";
 
@@ -6,7 +7,7 @@ import { pad, unpad } from "../padding.js";
  * @param cipherClass Initialized cipher class
  * @param data Key to be wrapped
  */
-export const wrapKey = (cipherClass: KalynaBase, data: Uint8Array): Uint8Array => {
+export const wrapKey = (cipherClass: KalynaBase, data: TArg<Uint8Array>): TRet<Uint8Array> => {
     const blockSize = cipherClass.blockSize;
     const block_size_kw_byte = blockSize >> 1;
     let plain_data_size_byte = data.length;
@@ -69,7 +70,7 @@ export const wrapKey = (cipherClass: KalynaBase, data: Uint8Array): Uint8Array =
  * @param cipherClass Initialized cipher class
  * @param data Key to be unwrapped
  */
-export const unwrapKey = (cipherClass: KalynaBase, data: Uint8Array): Uint8Array => {
+export const unwrapKey = (cipherClass: KalynaBase, data: TArg<Uint8Array>): TRet<Uint8Array> => {
     const blockSize = cipherClass.blockSize;
     const block_size_kw_byte = blockSize >> 1;
     const cipher_data = new Uint8Array(data);

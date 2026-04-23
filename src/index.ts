@@ -1,26 +1,27 @@
+import type { TArg } from "@li0ard/gost3413";
 import { KalynaBase } from "./core.js";
 
 /** Kalyna 128 bit version */
 export class Kalyna128 extends KalynaBase {
-    constructor(key: Uint8Array) { super(key, 2); }
+    constructor(key: TArg<Uint8Array>) { super(key, 2); }
 }
 /** Kalyna 128/256 bit version */
 export class Kalyna128_256 extends KalynaBase {
-    constructor(key: Uint8Array) { super(key, 2, true); }
+    constructor(key: TArg<Uint8Array>) { super(key, 2, true); }
 }
 
 /** Kalyna 256 bit version */
 export class Kalyna256 extends KalynaBase {
-    constructor(key: Uint8Array) { super(key, 4); }
+    constructor(key: TArg<Uint8Array>) { super(key, 4); }
 }
 /** Kalyna 256/512 bit version */
 export class Kalyna256_512 extends KalynaBase {
-    constructor(key: Uint8Array) { super(key, 4, true); }
+    constructor(key: TArg<Uint8Array>) { super(key, 4, true); }
 }
 
 /** Kalyna 512 bit version */
 export class Kalyna512 extends KalynaBase {
-    constructor(key: Uint8Array) { super(key, 8); }
+    constructor(key: TArg<Uint8Array>) { super(key, 8); }
 }
 
 export * from "./padding.js";

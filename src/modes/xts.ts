@@ -1,5 +1,6 @@
+import { numberToBytesLE, type TArg, type TRet } from "@li0ard/gost3413";
 import type { KalynaBase } from "../core.js";
-import { gf2mMul, numberToBytesLE } from "../utils.js";
+import { gf2mMul } from "../utils.js";
 
 /**
  * Encrypts data using XEX Tweakable Block Ciphertext Stealing (XTS) mode
@@ -7,7 +8,7 @@ import { gf2mMul, numberToBytesLE } from "../utils.js";
  * @param data Data to be encrypted
  * @param iv Initialization vector
  */
-export const encryptXTS = (cipherClass: KalynaBase, data: Uint8Array, iv: Uint8Array): Uint8Array => {
+export const encryptXTS = (cipherClass: KalynaBase, data: TArg<Uint8Array>, iv: TArg<Uint8Array>): TRet<Uint8Array> => {
     const block_len = cipherClass.blockSize;
     const plain_size = data.length;
     const padded_len = block_len - (plain_size % block_len);
@@ -64,7 +65,7 @@ export const encryptXTS = (cipherClass: KalynaBase, data: Uint8Array, iv: Uint8A
  * @param data Data to be decrypted
  * @param iv Initialization vector
  */
-export const decryptXTS = (cipherClass: KalynaBase, data: Uint8Array, iv: Uint8Array): Uint8Array => {
+export const decryptXTS = (cipherClass: KalynaBase, data: TArg<Uint8Array>, iv: TArg<Uint8Array>): TRet<Uint8Array> => {
     const block_len = cipherClass.blockSize;
     const plain_size = data.length;
     const padded_len = block_len - (plain_size % block_len);

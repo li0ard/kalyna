@@ -1,4 +1,4 @@
-import { xor } from "@li0ard/gost3413/dist/utils.js";
+import { xor, type TArg, type TRet } from "@li0ard/gost3413/dist/utils.js";
 import type { KalynaBase } from "../core.js";
 import { pad } from "../padding.js";
 
@@ -7,7 +7,7 @@ import { pad } from "../padding.js";
  * @param cipherClass Initialized cipher class
  * @param in_ Data to be authenticated
  */
-export const cmac = (cipherClass: KalynaBase, data: Uint8Array, q: number = 16): Uint8Array => {
+export const cmac = (cipherClass: KalynaBase, data: TArg<Uint8Array>, q: number = 16): TRet<Uint8Array> => {
     const zeroBlock = new Uint8Array(cipherClass.blockSize);
 
     if(data.length % cipherClass.blockSize !== 0) {

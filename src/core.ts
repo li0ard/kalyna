@@ -1,12 +1,13 @@
+import type { TArg, TRet } from "@li0ard/gost3413";
 import { IS, IT, KUPYNA_T, S } from "./const.js";
 import { bytesToUint64s, swap_block, uint64sToBytes } from "./utils.js";
 
 /** Kalyna abstract class */
 export abstract class KalynaBase {
     /** Round keys for encryption */
-    public erk!: BigUint64Array;
+    public erk!: TArg<BigUint64Array>;
     /** Rounds keys for decryption */
-    public drk!: BigUint64Array;
+    public drk!: TArg<BigUint64Array>;
     /** Block size */
     public readonly blockSize: number;
     /** Key size */
@@ -17,7 +18,7 @@ export abstract class KalynaBase {
     private wordOffsets: number[];
 
     /** Kalyna abstract class */
-    constructor(key: Uint8Array, public readonly N: number, isDouble: boolean = false) {
+    constructor(key: TArg<Uint8Array>, public readonly N: number, isDouble: boolean = false) {
         if(N < 2 || (N & (N - 1)) !== 0) throw new Error("N must be power of 2 and >= 2");
         this.blockSize = N << 3;
         this.keySize = this.blockSize;
@@ -31,7 +32,7 @@ export abstract class KalynaBase {
         this.expandKey(key);
     }
 
-    private expandKey(key: Uint8Array) {
+    private expandKey(key: TArg<Uint8Array>) {
         const log2N = Math.log2(this.N),
             // For 128/256 and 256/512 versions
             isDoubleKey = (this.keySize === this.blockSize * 2),
@@ -86,7 +87,7 @@ export abstract class KalynaBase {
         this.drk = rk.slice();
     }
 
-    private makeOddKey(evenkey: BigUint64Array, oddkey: BigUint64Array) {
+    private makeOddKey(evenkey: TArg<BigUint64Array>, oddkey: TArg<BigUint64Array>) {
         const offset = 2 * this.N + 3;
         const evenkeys = uint64sToBytes(evenkey);
         const oddkeys = uint64sToBytes(oddkey);
@@ -96,21 +97,21 @@ export abstract class KalynaBase {
         oddkey.set(bytesToUint64s(oddkeys));
     }
 
-    private addkey(x: BigUint64Array, y: BigUint64Array, k: BigUint64Array) {
+    private addkey(x: TArg<BigUint64Array>, y: TArg<BigUint64Array>, k: TArg<BigUint64Array>) {
         for (let i = 0; i < this.N; i++) y[i] = x[i] + k[i];
     }
 
-    private subkey(x: BigUint64Array, y: BigUint64Array, k: BigUint64Array) {
+    private subkey(x: TArg<BigUint64Array>, y: TArg<BigUint64Array>, k: TArg<BigUint64Array>) {
         for (let i = 0; i < this.N; i++) y[i] = x[i] - k[i];
     }
 
-    private add_constant(src: BigUint64Array, dst: BigUint64Array, constant: bigint) {
+    private add_constant(src: TArg<BigUint64Array>, dst: TArg<BigUint64Array>, constant: bigint) {
         for(let i = 0; i < this.N; i++) dst[i] = src[i] + constant;
     }
 
     private byte(a: bigint): number { return Number(a & 0xFFn); }
 
-    private G0(x: BigUint64Array, y: BigUint64Array) {
+    private G0(x: TArg<BigUint64Array>, y: TArg<BigUint64Array>) {
         for (let i = 0; i < this.N; i++) {
             y[i] = 0n;
             for (let j = 0; j < 8; j++) {
@@ -119,7 +120,7 @@ export abstract class KalynaBase {
         }
     }
 
-    private G(x: BigUint64Array, y: BigUint64Array, k: BigUint64Array) {
+    private G(x: TArg<BigUint64Array>, y: TArg<BigUint64Array>, k: TArg<BigUint64Array>) {
         for (let i = 0; i < this.N; i++) {
             y[i] = k[i];
             for (let j = 0; j < 8; j++) {
@@ -128,7 +129,7 @@ export abstract class KalynaBase {
         }
     }
 
-    private GL(x: BigUint64Array, y: BigUint64Array, k: BigUint64Array) {
+    private GL(x: TArg<BigUint64Array>, y: TArg<BigUint64Array>, k: TArg<BigUint64Array>) {
         for (let i = 0; i < this.N; i++) {
             let temp = 0n;
             for (let j = 0; j < 8; j++) {
@@ -138,7 +139,7 @@ export abstract class KalynaBase {
         }
     }
 
-    private IMC(x: BigUint64Array) {
+    private IMC(x: TArg<BigUint64Array>) {
         for (let i = 0; i < this.N; i++) {
             const v = x[i];
             x[i] = IT[0][S[0][this.byte(v)]] ^
@@ -152,7 +153,7 @@ export abstract class KalynaBase {
         }
     }
 
-    private IG(x: BigUint64Array, y: BigUint64Array, k: BigUint64Array) {
+    private IG(x: TArg<BigUint64Array>, y: TArg<BigUint64Array>, k: TArg<BigUint64Array>) {
         for (let i = 0; i < this.N; i++) {
             let result = k[i];
             for (let j = 0; j < 8; j++) {
@@ -162,7 +163,7 @@ export abstract class KalynaBase {
         }
     }
 
-    private IGL(x: BigUint64Array, y: BigUint64Array, k: BigUint64Array) {
+    private IGL(x: TArg<BigUint64Array>, y: TArg<BigUint64Array>, k: TArg<BigUint64Array>) {
         for (let i = 0; i < this.N; i++) {
             let result = 0n;
             for (let j = 0; j < 8; j++) {
@@ -177,7 +178,7 @@ export abstract class KalynaBase {
      * Encrypt data
      * @param in_ Data to be encrypted
      */
-    public encrypt(in_: Uint8Array): Uint8Array {
+    public encrypt(in_: TArg<Uint8Array>): TRet<Uint8Array> {
         if(in_.length != this.blockSize) throw new Error(`Incorrect length (need - ${this.blockSize}, got - ${in_.length})`);
         const t1 = new BigUint64Array(this.N);
         const t2 = new BigUint64Array(this.N);
@@ -200,7 +201,7 @@ export abstract class KalynaBase {
      * Decrypt data
      * @param in_ Data to be decrypted
      */
-    public decrypt(in_: Uint8Array): Uint8Array {
+    public decrypt(in_: TArg<Uint8Array>): TRet<Uint8Array> {
         if(in_.length != this.blockSize) throw new Error(`Incorrect length (need - ${this.blockSize}, got - ${in_.length})`);
         const t1 = new BigUint64Array(this.N);
         const t2 = new BigUint64Array(this.N);

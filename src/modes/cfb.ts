@@ -1,3 +1,4 @@
+import type { TArg, TRet } from "@li0ard/gost3413";
 import type { KalynaBase } from "../core.js";
 
 /**
@@ -7,7 +8,12 @@ import type { KalynaBase } from "../core.js";
  * @param iv Initialization vector
  * @param q Param `q`
  */
-export const encryptCFB = (cipherClass: KalynaBase, data: Uint8Array, iv: Uint8Array, q: number = cipherClass.blockSize): Uint8Array => {
+export const encryptCFB = (
+    cipherClass: KalynaBase,
+    data: TArg<Uint8Array>,
+    iv: TArg<Uint8Array>,
+    q: number = cipherClass.blockSize
+): TRet<Uint8Array> => {
     const blockSize = cipherClass.blockSize;
     if (q !== 1 && q !== 8 && q !== 16 && q !== 32 && q !== 64) throw new Error('q must be 1, 8, 16, 32, or 64');
     if (q > blockSize) throw new Error('q cannot exceed block size');
@@ -52,7 +58,12 @@ export const encryptCFB = (cipherClass: KalynaBase, data: Uint8Array, iv: Uint8A
  * @param iv Initialization vector
  * @param q Param `q`
  */
-export const decryptCFB = (cipherClass: KalynaBase, data: Uint8Array, iv: Uint8Array, q: number = cipherClass.blockSize): Uint8Array => {
+export const decryptCFB = (
+    cipherClass: KalynaBase,
+    data: TArg<Uint8Array>,
+    iv: TArg<Uint8Array>,
+    q: number = cipherClass.blockSize
+): TRet<Uint8Array> => {
     const blockSize = cipherClass.blockSize;
     if (q !== 1 && q !== 8 && q !== 16 && q !== 32 && q !== 64) throw new Error('q must be 1, 8, 16, 32, or 64');
     if (q > blockSize) throw new Error('q cannot exceed block size');

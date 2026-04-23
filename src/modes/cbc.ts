@@ -1,4 +1,4 @@
-import { cbc_encrypt, cbc_decrypt } from "@li0ard/gost3413";
+import { cbc_encrypt, cbc_decrypt, type TArg, type TRet } from "@li0ard/gost3413";
 import type { KalynaBase } from "../core.js";
 
 /**
@@ -7,9 +7,12 @@ import type { KalynaBase } from "../core.js";
  * @param data Data to be encrypted
  * @param iv Initialization vector
  */
-export const encryptCBC = (cipherClass: KalynaBase, data: Uint8Array, iv: Uint8Array): Uint8Array => {
-    return cbc_encrypt(cipherClass.encrypt.bind(cipherClass), cipherClass.blockSize, data, iv);
-}
+export const encryptCBC = (
+    cipherClass: KalynaBase,
+    data: TArg<Uint8Array>,
+    iv: TArg<Uint8Array>
+): TRet<Uint8Array> =>
+    cbc_encrypt(cipherClass.encrypt.bind(cipherClass), cipherClass.blockSize, data, iv);
 
 /**
  * Decrypts data using Cipher Block Chaining (CBC) mode
@@ -17,6 +20,9 @@ export const encryptCBC = (cipherClass: KalynaBase, data: Uint8Array, iv: Uint8A
  * @param data Data to be decrypted
  * @param iv Initialization vector
  */
-export const decryptCBC = (cipherClass: KalynaBase, data: Uint8Array, iv: Uint8Array): Uint8Array => {
-    return cbc_decrypt(cipherClass.decrypt.bind(cipherClass), cipherClass.blockSize, data, iv);
-}
+export const decryptCBC = (
+    cipherClass: KalynaBase,
+    data: TArg<Uint8Array>,
+    iv: TArg<Uint8Array>
+): TRet<Uint8Array> =>
+    cbc_decrypt(cipherClass.decrypt.bind(cipherClass), cipherClass.blockSize, data, iv);

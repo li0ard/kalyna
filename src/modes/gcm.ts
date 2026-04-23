@@ -1,7 +1,7 @@
-import { concatBytes, xor } from "@li0ard/gost3413/dist/utils.js";
+import { concatBytes, equalBytes, numberToBytesLE, xor, type TArg, type TRet } from "@li0ard/gost3413/dist/utils.js";
 import type { KalynaBase } from "../core.js";
 import { ctr } from "../index.js";
-import { equalBytes, gf2mMul, numberToBytesLE } from "../utils.js";
+import { gf2mMul } from "../utils.js";
 
 /**
  * Compute GMAC
@@ -10,7 +10,12 @@ import { equalBytes, gf2mMul, numberToBytesLE } from "../utils.js";
  * @param cipherData Ciphertext to be authenticated (Only for GMAC)
  * @param q MAC size
  */
-export const gmac = (cipherClass: KalynaBase, authData: Uint8Array, cipherData: Uint8Array = new Uint8Array(), q: number = 16): Uint8Array => {
+export const gmac = (
+    cipherClass: KalynaBase,
+    authData: TArg<Uint8Array>,
+    cipherData: TArg<Uint8Array> = new Uint8Array(),
+    q: number = 16
+): TRet<Uint8Array> => {
     const blockSize = cipherClass.blockSize;
     const H = cipherClass.encrypt(new Uint8Array(blockSize));
 
@@ -55,7 +60,13 @@ export const gmac = (cipherClass: KalynaBase, authData: Uint8Array, cipherData: 
  * @param authData Additional data to be authenticated
  * @param q MAC size
  */
-export const encryptGCM = (cipherClass: KalynaBase, plainData: Uint8Array, iv: Uint8Array, authData: Uint8Array = new Uint8Array(), q: number = 16): Uint8Array => {
+export const encryptGCM = (
+    cipherClass: KalynaBase,
+    plainData: TArg<Uint8Array>,
+    iv: TArg<Uint8Array>,
+    authData: TArg<Uint8Array> = new Uint8Array(),
+    q: number = 16
+): TRet<Uint8Array> => {
     const enc = ctr(cipherClass, plainData, iv);
     return concatBytes(enc, gmac(cipherClass, authData, enc, q));
 }
@@ -68,7 +79,13 @@ export const encryptGCM = (cipherClass: KalynaBase, plainData: Uint8Array, iv: U
  * @param authData Additional data to be authenticated
  * @param q MAC size
  */
-export const decryptGCM =  (cipherClass: KalynaBase, encryptedData: Uint8Array, iv: Uint8Array, authData: Uint8Array = new Uint8Array(), q: number = 16): Uint8Array => {
+export const decryptGCM =  (
+    cipherClass: KalynaBase,
+    encryptedData: TArg<Uint8Array>,
+    iv: TArg<Uint8Array>,
+    authData: TArg<Uint8Array> = new Uint8Array(),
+    q: number = 16
+): TRet<Uint8Array> => {
     const enc = encryptedData.slice(0, -q);
     const hC = gmac(cipherClass, authData, enc, q);
 

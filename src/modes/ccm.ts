@@ -1,9 +1,15 @@
-import { concatBytes } from "@li0ard/gost3413/dist/utils.js";
+import { concatBytes, equalBytes, type TArg, type TRet } from "@li0ard/gost3413/dist/utils.js";
 import { ctr } from "../index.js";
 import type { KalynaBase } from "../core.js";
-import { equalBytes } from "../utils.js";
 
-const ccm_mac = (cipherClass: KalynaBase, iv: Uint8Array, authData: Uint8Array, plainData: Uint8Array, q: number = 16, Nb: number = 4): Uint8Array => {
+const ccm_mac = (
+    cipherClass: KalynaBase,
+    iv: TArg<Uint8Array>,
+    authData: TArg<Uint8Array>,
+    plainData: TArg<Uint8Array>,
+    q: number = 16,
+    Nb: number = 4
+): TRet<Uint8Array> => {
     const blockSize = cipherClass.blockSize;
     if (blockSize < Nb + 1) throw new Error('blockSize must be >= Nb + 1');
 
@@ -80,7 +86,14 @@ const ccm_mac = (cipherClass: KalynaBase, iv: Uint8Array, authData: Uint8Array, 
  * @param q MAC size
  * @param Nb Param `Nb`
  */
-export const encryptCCM = (cipherClass: KalynaBase, plainData: Uint8Array, iv: Uint8Array, authData: Uint8Array = new Uint8Array(), q: number = 16, Nb: number = 4): Uint8Array => {
+export const encryptCCM = (
+    cipherClass: KalynaBase,
+    plainData: TArg<Uint8Array>,
+    iv: TArg<Uint8Array>,
+    authData: TArg<Uint8Array> = new Uint8Array(),
+    q: number = 16,
+    Nb: number = 4
+): TRet<Uint8Array> => {
     const h = ccm_mac(cipherClass, iv, authData, plainData, q, Nb);
     return ctr(cipherClass, concatBytes(plainData, h), iv);
 }
@@ -94,7 +107,14 @@ export const encryptCCM = (cipherClass: KalynaBase, plainData: Uint8Array, iv: U
  * @param q MAC size
  * @param Nb Param `Nb`
  */
-export const decryptCCM = (cipherClass: KalynaBase, encryptedData: Uint8Array, iv: Uint8Array, authData: Uint8Array = new Uint8Array(), q: number = 16, Nb: number = 4): Uint8Array => {
+export const decryptCCM = (
+    cipherClass: KalynaBase,
+    encryptedData: TArg<Uint8Array>,
+    iv: TArg<Uint8Array>,
+    authData: TArg<Uint8Array> = new Uint8Array(),
+    q: number = 16,
+    Nb: number = 4
+): TRet<Uint8Array> => {
     const raw = ctr(cipherClass, encryptedData, iv);
     const pt = raw.slice(0, -q);
     const hC = ccm_mac(cipherClass, iv, authData, pt, q, Nb);
