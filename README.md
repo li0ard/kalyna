@@ -13,6 +13,9 @@
     <hr>
 </p>
 
+> [!IMPORTANT]  
+> This repository is archived. All DSTU implementations moved to [`@li0ard/dstu`](https://github.com/li0ard/dstu)
+
 ## Installation
 
 ```bash
